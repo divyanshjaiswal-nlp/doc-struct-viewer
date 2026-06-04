@@ -25,9 +25,3 @@ streamlit run app.py
 | `RAW_DIR`          | Folder of `<patient_id>.json` raw documents.                   |
 | `ANNOTATIONS_FILE` | CSV path where reviewer feedback is written.                   |
 
-## Deploying
-
-This app reads documents from **local filesystem paths** and displays clinical
-data, so it must run **on a machine/network that can see those folders** (an
-internal VM/server) — not on public Streamlit Community Cloud. Keep the paths in
-the server's environment (or Streamlit secrets), never in git.
