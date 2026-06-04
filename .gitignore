@@ -1,0 +1,15 @@
+# secrets & local config — NEVER commit (contains data paths)
+.env
+
+# reviewer output / data — never commit patient data or annotations
+*.csv
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# os / editor
+.DS_Store
+.ipynb_checkpoints/
