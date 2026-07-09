@@ -53,6 +53,7 @@ def build_highlight_model(doc_text: str, items: Iterable[dict]) -> List[dict]:
     info = [{"text": ln, "color": None, "tags": [], "anchors": []} for ln in lines]
     for item in items:
         i = item.get("idx", 0)
+        ns = item.get("ns", "")  # anchor namespace, e.g. "m-"/"b-" on the compare page
         color = item.get("color")
         accent = item.get("accent", color)
         earliest: Optional[int] = None
@@ -66,11 +67,11 @@ def build_highlight_model(doc_text: str, items: Iterable[dict]) -> List[dict]:
             s1, e1 = lo + 1, hi + 1
             label = f"L{s1}" if s1 == e1 else f"L{s1}–{e1}"
             info[lo]["tags"].append((label, accent))
-            info[lo]["anchors"].append(f"cite-{i}-{j}")
+            info[lo]["anchors"].append(f"cite-{ns}{i}-{j}")
             if earliest is None or lo < earliest:
                 earliest = lo
         if earliest is not None:
-            info[earliest]["anchors"].append(f"dp-{i}")
+            info[earliest]["anchors"].append(f"dp-{ns}{i}")
     return info
 
 

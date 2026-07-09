@@ -1,0 +1,19 @@
+# Streamlit server config — travels with the code so the same settings apply on
+# the bastion. With this file present you can just run:  streamlit run app.py
+
+[server]
+address = "0.0.0.0"       # listen on all interfaces so the forwarded port is reachable
+port = 8570              # <-- the port to forward off the bastion
+headless = true           # server deploy: don't try to open a local browser
+
+# If nlp-tools serves the app under a SUBPATH (e.g. .../doc-viewer/), uncomment
+# and set it (no leading slash) so static assets + the WebSocket resolve:
+baseUrlPath = "doc-viewer"
+
+# Only uncomment these if the app WON'T connect through the proxy (origin/XSRF
+# mismatch) even after the WebSocket is being forwarded:
+# enableCORS = false
+# enableXsrfProtection = false
+
+[browser]
+gatherUsageStats = false  # no telemetry to Streamlit (clinical data context)

@@ -9,8 +9,8 @@ If the prompt ever changes a section key, change it here too — everything else
 """
 from __future__ import annotations
 
-# (canonical_key, human_label) in the order they appear in the extraction prompt.
-SECTIONS: list[tuple[str, str]] = [
+# The baseline run's 20 sections — used only by the "Compare vs baseline" page.
+BASELINE_SECTIONS: list[tuple[str, str]] = [
     ("demographics_and_generic_information", "Patient Demographics & General Info"),
     ("cancer_diagnosis_and_staging",         "Cancer Diagnosis & Staging"),
     ("pathology_event",                      "Pathology Events"),
@@ -33,5 +33,35 @@ SECTIONS: list[tuple[str, str]] = [
     ("any_other_informations",               "Any Other Information"),
 ]
 
+# (canonical_key, human_label) in the order they appear in the extraction prompt.
+SECTIONS: list[tuple[str, str]] = [
+    ("demographics_and_generic_information", "Patient Demographics & General Info"),
+    ("cancer_diagnosis_and_staging",         "Cancer Diagnosis & Staging"),
+    ("procedure",                            "Procedure"),
+    ("mutation_and_biomarkers",              "Genetic Mutations & Biomarkers"),
+    ("disease_progression",                  "Disease Progression / Response"),
+    ("gross_description",                    "Gross Descriptions"),
+    ("labs",                                 "Labs"),
+    ("microscopic_description",               "Microscopic Description"),
+    ("addendum",                             "Addendum"),
+    ("any_other_informations",               "Any Other Information"),
+]
+
+# SECTIONS: list[tuple[str, str]] = [
+#     ("demographics_and_generic_information", "Patient Demographics & General Info"),
+#     ("clinical_indication",                  "Clinical Indication"),
+#     ("technique",                            "Technique"),
+#     ("comparison",                           "Comparison"),
+#     ("findings",                             "Findings"),
+#     ("limitations",                          "Limitations"),
+#     ("cancer_diagnosis_and_staging",         "Cancer Diagnosis & Staging"),
+#     ("disease_progression",                  "Disease Progression / Response"),
+#     ("followup_assessment_and_plan",         "Followup Assessment and Plan"),
+#     ("any_other_informations",               "Any Other Information"),
+# ]
+
 SECTION_KEYS: list[str] = [k for k, _ in SECTIONS]
 SECTION_LABELS: dict[str, str] = dict(SECTIONS)
+
+BASELINE_SECTION_KEYS: list[str] = [k for k, _ in BASELINE_SECTIONS]
+BASELINE_SECTION_LABELS: dict[str, str] = dict(BASELINE_SECTIONS)

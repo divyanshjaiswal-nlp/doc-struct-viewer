@@ -23,6 +23,7 @@ All loaders are cached with st.cache_data, keyed by their arguments. The sidebar
 """
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
 from typing import Any
@@ -61,6 +62,33 @@ def load_patient_output(output_dir: str, subfolder: str, patient_id: str) -> dic
     path = Path(output_dir) / subfolder / f"{patient_id}.json"
     with path.open() as f:
         return json.load(f)
+
+
+# --- doc -> patient index (so reviewers can open a doc by id alone) ----------
+
+@st.cache_data(show_spinner=False)
+def load_doc_patient_map(csv_path: str) -> dict[str, str]:
+    """Index every document id to its patient id, from a CSV the operator maintains.
+
+    Lets a reviewer open a document by id alone — no run/patient picking. The CSV
+    must have a header row with `doc_id` and `patient_id` columns. Missing or
+    unreadable file (or those columns absent) -> {}.
+    """
+    path = Path(csv_path)
+    if not path.exists():
+        return {}
+    out: dict[str, str] = {}
+    with path.open(newline="", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        fields = reader.fieldnames or []
+        if "doc_id" not in fields or "patient_id" not in fields:
+            return {}
+        for row in reader:
+            d = (row.get("doc_id") or "").strip()
+            p = (row.get("patient_id") or "").strip()
+            if d and p:
+                out[d] = p
+    return out
 
 
 # --- raw side (the original document text the citations point into) ----------

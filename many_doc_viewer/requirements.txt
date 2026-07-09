@@ -1,2 +1,2 @@
-streamlit>=1.56
+streamlit>=1.32
 python-dotenv>=1.0
