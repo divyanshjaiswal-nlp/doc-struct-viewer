@@ -1,0 +1,5 @@
+streamlit>=1.56
+python-dotenv>=1.0
+# optional: enables the fuzzy citation match. Without it the chain stops at the
+# whitespace/prefix fallbacks, which already cover most misses.
+rapidfuzz>=3.0

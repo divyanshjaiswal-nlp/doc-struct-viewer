@@ -8,7 +8,7 @@ headless = true           # server deploy: don't try to open a local browser
 
 # If nlp-tools serves the app under a SUBPATH (e.g. .../doc-viewer/), uncomment
 # and set it (no leading slash) so static assets + the WebSocket resolve:
-baseUrlPath = "doc-viewer"
+baseUrlPath = "l1_date_check"
 
 # Only uncomment these if the app WON'T connect through the proxy (origin/XSRF
 # mismatch) even after the WebSocket is being forwarded:
