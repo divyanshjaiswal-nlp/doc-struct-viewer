@@ -28,6 +28,10 @@ from __future__ import annotations
 
 import html
 
+# the one thing shared with the line-based highlighter: how the app's theme is stamped on
+# the page, since both are rendered inside a components.html iframe
+from line_highlight import doc_open
+
 # Similarity floor, 0-100. Judge citations come from the date->events index, which is
 # LLM-written *about* the document rather than quoted from it, so they are often
 # paraphrases -- the floor has to be lower than it would be for verbatim L1 citations.
@@ -67,17 +71,20 @@ def colour_for(number: int) -> tuple[str, str]:
 # inside it, and it always has a scrollbar of its own. The pills must therefore live in
 # the iframe too, since a link in the parent document cannot reach an anchor inside one.
 PAGE_CSS = """
-:root { color-scheme: light dark; }
+:root { color-scheme: light dark; --ink: #17181a; }
+/* dark twice: the iframe reads prefers-color-scheme from the BROWSER, so a dark app on a
+   light OS needs the theme stamped on <html> instead -- see line_highlight.doc_open */
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ink: #f0f1f3; } }
+:root[data-theme="dark"] { --ink: #f0f1f3; }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
 body {
-  margin: 0; background: transparent; color: #17181a;
+  margin: 0; background: transparent; color: var(--ink);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .82rem; line-height: 1.55;
   /* the document never scrolls -- .scroll does, so nothing can chain outward */
   display: flex; flex-direction: column; overflow: hidden;
 }
-@media (prefers-color-scheme: dark) { body { color: #e6e7e9; } }
 .bar {
   flex: 0 0 auto; padding: .3rem 0 .4rem;
   background: rgba(128,128,128,.10);
@@ -320,7 +327,8 @@ def _segment_attrs(covering: list[tuple[int, int, int, str]]) -> str:
 
 
 def document_page(doc_text: str, citations: list[dict],
-                  notes: list[str] | None = None) -> tuple[str, list[tuple[int, str]]]:
+                  notes: list[str] | None = None,
+                  dark: bool | None = None) -> tuple[str, list[tuple[int, str]]]:
     """
     A COMPLETE standalone HTML page for one document, plus [(citation number, method)].
 
@@ -374,7 +382,7 @@ def document_page(doc_text: str, citations: list[dict],
     )
 
     page = (
-        "<!doctype html><html><head><meta charset='utf-8'>"
+        f"<!doctype html>{doc_open(dark)}<head><meta charset='utf-8'>"
         f"<style>{PAGE_CSS}</style><script>{PAGE_JS}</script></head><body>"
         + (f'<div class="bar">{pills}</div>' if pills else "")
         + f'<div class="scroll"><div class="doc">{"".join(parts)}</div></div>'

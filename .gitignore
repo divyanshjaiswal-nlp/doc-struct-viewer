@@ -13,3 +13,6 @@ venv/
 # os / editor
 .DS_Store
 .ipynb_checkpoints/
+
+# db config — holds database passwords, NEVER commit
+db_config.py

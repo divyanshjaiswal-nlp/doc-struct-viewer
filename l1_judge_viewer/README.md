@@ -20,6 +20,15 @@ RESULTS_DIR=
 
 # raw documents, <patient_id>.json                        (optional)
 PATIENT_DATA_DIR=
+
+# ── Summary -> anchors page ──
+# L1 run holding the summary entity (oncology_history_v3). A folder per patient, a folder
+# of <patient_id>.json, or a single json file.
+ONCO_L1_DIR=
+
+# merged doc-to-struct date anchors, keyed by date. A directory of <patient_id>.json, or
+# the merged file itself.
+MERGED_ANCHOR_DIR=
 ```
 
 All four are also editable from the sidebar at runtime, so `.env` only sets the defaults.
@@ -51,6 +60,32 @@ streamlit run app.py
    - **Evidence** — one expander per `docId`, listing only the `text` of each citation
 4. *Show raw record JSON* dumps the full record minus evidence. That's the quickest way
    to spot a key worth adding to `extra` in `config.py`.
+
+## Summary → anchors
+
+The oncology-history summary beside the merged doc-to-struct date anchors.
+
+The entity needs **no entry in `config.py`** — it is found by the shape of its records
+(anything carrying a text `summary`), and every other key on the record is ignored. Pick a
+patient, pick the entity, and the merged file is matched by patient id (with a picker when
+the name does not line up, since that file is assembled by hand).
+
+Every date in the prose is marked at whatever precision it was written — `2024`,
+`July 2024`, `7/28/24`, `2024-07-28` — and looked up in the index:
+
+| mark | |
+|---|---|
+| solid blue | the index has that exact key; click to scroll to it |
+| dashed blue | the same date at a different precision, e.g. `July 2024` → `2024-07-28` |
+| amber | nothing in the index on that date |
+
+A matched date key scrolls back to the mention that reached it. Two expanders below the
+panes list the gaps in both directions: summary dates with no key, and keys the summary
+never mentions.
+
+The merged file may be `{date: [text, ...]}`, `{date: [{text, docId}, ...]}` or
+`{docId: {date: [...]}}` — dates are pooled across documents either way, so one date is
+one group.
 
 `config.py` deliberately duplicates the judge's `ENTITY_CONFIG` rather than importing it:
 the judge only needs dates + identity, while the viewer wants context fields too, and
