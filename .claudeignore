@@ -1,0 +1,43 @@
+# .claudeignore — files Claude must never read, write, edit, grep or cat.
+#
+# ENFORCEMENT LIVES IN .claude/settings.json (permissions.deny). That file is
+# what Claude Code actually reads; this one is the human-readable index of the
+# same list, in gitignore syntax, so the intent is visible at the repo root and
+# other tools (ripgrep honours .ignore-style files) can reuse it.
+#
+# If you add a pattern here, add the matching Read/Write/Edit/Bash triples to
+# .claude/settings.json too, or it will not be enforced.
+
+# ── database connections: holds host, user and PASSWORD per tenant ───────────
+db_config.py
+**/db_config.py
+
+# ── environment files: SAS tokens, storage accounts, output paths ────────────
+.env
+.env.*
+*.env
+**/.env
+**/.env.*
+**/*.env
+env.example
+**/env.example
+d2s.env
+**/d2s.env
+
+# ── keys and credentials ─────────────────────────────────────────────────────
+.credentials.json
+**/.credentials.json
+*.pem
+*.key
+**/*.pem
+**/*.key
+id_rsa*
+**/id_rsa*
+.netrc
+**/.netrc
+
+# ── notes ────────────────────────────────────────────────────────────────────
+# db_config.example.py and env.example templates in source_doc_viewer are the
+# blank skeletons — they are meant to be readable, but the .env* patterns above
+# catch env.example anyway. Fill in the real values only in db_config.py and a
+# .env, both of which are gitignored and denied above.

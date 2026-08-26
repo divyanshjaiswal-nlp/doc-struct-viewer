@@ -1,0 +1,29 @@
+# Streamlit server + theme config for the source-document viewer. Travels with the
+# code so the same settings apply on the bastion. Run it from THIS folder:
+#     cd source_doc_viewer && streamlit run app.py
+
+[server]
+address = "0.0.0.0"        # listen on all interfaces so the forwarded port is reachable
+port = 8571                # <-- the port to forward off the bastion (8570 is the l1 viewer)
+headless = true            # server deploy: don't try to open a local browser
+
+# If nlp-tools serves the app under a SUBPATH, this is the segment (no leading slash)
+# so static assets and the WebSocket resolve.
+baseUrlPath = "source_doc_viewer"
+
+# PDFs and page images travel over the websocket, so leave room above the default.
+maxMessageSize = 300
+
+# Dark, and pinned rather than left to "auto" -- clinical documents are read for long
+# stretches, and a scanned page on a bright chrome is the worst of both. The CSS in
+# styles.py only ever tints over these values, so it follows whatever is set here.
+[theme]
+base = "dark"
+backgroundColor = "#0e1117"          # page
+secondaryBackgroundColor = "#161b22" # sidebar, plates, code blocks
+textColor = "#e6edf3"
+primaryColor = "#4c8dff"             # accent: focus rings, primary button, slider
+font = "sans-serif"
+
+[browser]
+gatherUsageStats = false   # no telemetry to Streamlit (clinical data context)

@@ -1,0 +1,17 @@
+streamlit>=1.57
+python-dotenv>=1.0
+psycopg[binary]>=3.1   # psycopg 3, matching nlp_backend/common/db_connector.py
+lxml>=5.0              # XML pretty-printing, and the parser behind BeautifulSoup('xml')
+beautifulsoup4>=4.12
+Pillow>=10.0           # TIFF/JPEG/PNG, including multi-page TIFF
+python-magic>=0.4.27   # sniffing, for when mime_type disagrees with the file
+PyMuPDF>=1.24          # PDF page rasterising (the st.pdf fallback)
+
+# st.pdf is a wrapper over this separate component and raises without it.
+# Pinned below 2.0: streamlit-pdf 2.x needs a newer Streamlit than 1.57 and fails
+# at import with "must be declared in pyproject.toml with asset_dir".
+streamlit-pdf>=1.0.8,<2
+
+# Two system binaries, not pip packages:
+#   azcopy   fetches blobs          https://aka.ms/downloadazcopy
+#   pandoc   renders RTF documents  (optional -- RTF falls back to raw source)

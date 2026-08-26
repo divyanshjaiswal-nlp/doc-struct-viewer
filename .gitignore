@@ -16,3 +16,4 @@ venv/
 
 # db config — holds database passwords, NEVER commit
 db_config.py
+.claude
